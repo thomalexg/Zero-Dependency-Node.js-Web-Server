@@ -20,9 +20,9 @@ const server = http.createServer((req, res) => {
   //     res.end();
   //   });
   // }
-  else if (req.url === '/1.jpg') {
-    res.writeHead(200, { 'Content-Type': 'image/jpg' });
-    res.end(fs.readFileSync('./public/memes/1.jpg'));
+  else if (req.url === '/1.png') {
+    res.writeHead(200, { 'Content-Type': 'image/png' });
+    res.end(fs.readFileSync('./public/memes/1.png'));
   } else {
     res.write(JSON.stringify(404));
     res.end();

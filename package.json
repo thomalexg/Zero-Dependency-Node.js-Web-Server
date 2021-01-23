@@ -1,0 +1,8 @@
+{
+  "name": "Zero-Dependency-Node.js-Web-Server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/thomalexg/Zero-Dependency-Node.js-Web-Server",
+  "author": "thomalex <thomas.gae@posteo.de>",
+  "license": "MIT"
+}
