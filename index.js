@@ -24,7 +24,7 @@ server.listen(3000);
 
 console.log('server running on port 3000...');
 
-//other way of writing the esle if:
+// other way of writing the esle if:
 // else if (req.url === '/1.jpg') {
 //   fs.readFile('./memes/1.jpg', (error, data) => {
 //     if (error) throw error;
