@@ -11,16 +11,7 @@ const server = http.createServer((req, res) => {
   } else if (req.url === '/memes' || req.url === '/memes/index.html') {
     res.write(fs.readFileSync('./public/memes/index.html'));
     res.end();
-  }
-  // else if (req.url === '/1.jpg') {
-  //   fs.readFile('./memes/1.jpg', (error, data) => {
-  //     if (error) throw error;
-  //     res.writeHead(200, { 'Content-Type': 'image/jpeg' });
-  //     res.write(data);
-  //     res.end();
-  //   });
-  // }
-  else if (req.url === '/1.png') {
+  } else if (req.url === '/1.png') {
     res.writeHead(200, { 'Content-Type': 'image/png' });
     res.end(fs.readFileSync('./public/memes/1.png'));
   } else {
@@ -32,3 +23,13 @@ const server = http.createServer((req, res) => {
 server.listen(3000);
 
 console.log('server running on port 3000...');
+
+//other way of writing the esle if:
+// else if (req.url === '/1.jpg') {
+//   fs.readFile('./memes/1.jpg', (error, data) => {
+//     if (error) throw error;
+//     res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+//     res.write(data);
+//     res.end();
+//   });
+// }
