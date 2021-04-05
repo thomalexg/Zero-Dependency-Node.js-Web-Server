@@ -12,6 +12,7 @@ const server = http.createServer((req, res) => {
         res.write(fs.readFileSync(`./public${request}`));
         res.end();
       } else {
+        res.statusCode = 404;
         res.write(JSON.stringify(404));
         res.end();
       }
