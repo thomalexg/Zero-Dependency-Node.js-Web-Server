@@ -3,17 +3,15 @@ const fs = require('fs');
 
 const server = http.createServer((req, res) => {
   const request = req.url;
-  console.log('slicedit', request.slice(0, 6));
-  console.log('hwat are yu doing', request.slice(0, 6) !== '/memes');
-
   if (request.slice(0, 6) !== '/memes') {
-    console.log('pblic without memes');
     try {
-      if (fs.existsSync(`./public${request}`)) {
+      if (request === '/') {
+        res.write(fs.readFileSync('./public/index.html'));
+        res.end();
+      } else if (fs.existsSync(`./public${request}`)) {
         res.write(fs.readFileSync(`./public${request}`));
         res.end();
       } else {
-        console.log(request);
         res.write(JSON.stringify(404));
         res.end();
       }
@@ -22,15 +20,12 @@ const server = http.createServer((req, res) => {
       res.end();
     }
   } else if (request === '/memes') {
-    console.log('only memes');
     res.write(fs.readFileSync('./public/memes/index.html'));
     res.end();
   } else if (fs.existsSync(`./public${request}`)) {
-    console.log('index and more');
     res.write(fs.readFileSync(`./public/${request}`));
     res.end();
   } else {
-    console.log(request);
     res.write(JSON.stringify(404));
     res.end();
   }
