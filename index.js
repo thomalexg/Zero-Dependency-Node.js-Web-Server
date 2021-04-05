@@ -4,20 +4,11 @@ const fs = require('fs');
 const server = http.createServer((req, res) => {
   const request = req.url;
   if (request.slice(0, 6) !== '/memes') {
-    try {
-      if (request === '/') {
-        res.write(fs.readFileSync('./public/index.html'));
-        res.end();
-      } else if (fs.existsSync(`./public${request}`)) {
-        res.write(fs.readFileSync(`./public${request}`));
-        res.end();
-      } else {
-        res.statusCode = 404;
-        res.write(JSON.stringify(404));
-        res.end();
-      }
-    } catch (error) {
-      res.write(error);
+    if (request === '/') {
+      res.write(fs.readFileSync('./public/index.html'));
+      res.end();
+    } else if (fs.existsSync(`./public${request}`)) {
+      res.write(fs.readFileSync(`./public${request}`));
       res.end();
     }
   } else if (request === '/memes') {
