@@ -1,26 +1,48 @@
 const http = require('http');
 const fs = require('fs');
 
+function resFunc(res, request) {
+  res.write(fs.readFileSync(`./public/${request}`));
+  res.end();
+}
+function resFuncIndex(res, request) {
+  res.write(fs.readFileSync(`./public/${request}/index.html`));
+  res.end();
+}
+function resFailed(res) {
+  res.statusCode = 404;
+  res.write(JSON.stringify(404));
+  res.end();
+}
+
 const server = http.createServer((req, res) => {
-  const request = req.url;
-  if (request.slice(0, 6) !== '/memes') {
-    if (request === '/') {
-      res.write(fs.readFileSync('./public/index.html'));
-      res.end();
-    } else if (fs.existsSync(`./public${request}`)) {
-      res.write(fs.readFileSync(`./public${request}`));
-      res.end();
+  let request = req.url;
+  try {
+    if (request === '/favicon.ico') {
+      request = '/';
+      return;
     }
-  } else if (request === '/memes') {
-    res.write(fs.readFileSync('./public/memes/index.html'));
-    res.end();
-  } else if (fs.existsSync(`./public${request}`)) {
-    res.write(fs.readFileSync(`./public/${request}`));
-    res.end();
-  } else {
-    res.statusCode = 404;
-    res.write(JSON.stringify(404));
-    res.end();
+    if (
+      !fs.lstatSync(`./public${request}`).isDirectory() &&
+      fs.existsSync(`./public${request}`)
+    ) {
+      if (request === '/') {
+        resFunc(res, request);
+      } else if (fs.existsSync(`./public${request}`)) {
+        resFunc(res, request);
+      }
+    } else if (
+      request.split('/').length - 1 === 1 &&
+      fs.existsSync(`./public${request}`)
+    ) {
+      resFuncIndex(res, request);
+    } else if (fs.existsSync(`./public${request}`)) {
+      resFunc(res, request);
+    } else {
+      resFailed(res);
+    }
+  } catch (error) {
+    resFailed(res);
   }
 });
 
