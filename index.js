@@ -2,19 +2,35 @@ const http = require('http');
 const fs = require('fs');
 
 const server = http.createServer((req, res) => {
-  if (req.url === '/index.html' || req.url === '/') {
-    res.write(fs.readFileSync('./public/index.html'));
-    res.end();
-  } else if (req.url === '/index.css') {
-    res.write(fs.readFileSync('./public/index.css'));
-    res.end();
-  } else if (req.url === '/memes' || req.url === '/memes/index.html') {
+  const request = req.url;
+  console.log('slicedit', request.slice(0, 6));
+  console.log('hwat are yu doing', request.slice(0, 6) !== '/memes');
+
+  if (request.slice(0, 6) !== '/memes') {
+    console.log('pblic without memes');
+    try {
+      if (fs.existsSync(`./public${request}`)) {
+        res.write(fs.readFileSync(`./public${request}`));
+        res.end();
+      } else {
+        console.log(request);
+        res.write(JSON.stringify(404));
+        res.end();
+      }
+    } catch (error) {
+      res.write(error);
+      res.end();
+    }
+  } else if (request === '/memes') {
+    console.log('only memes');
     res.write(fs.readFileSync('./public/memes/index.html'));
     res.end();
-  } else if (req.url === '/1.png') {
-    res.writeHead(200, { 'Content-Type': 'image/png' });
-    res.end(fs.readFileSync('./public/memes/1.png'));
+  } else if (fs.existsSync(`./public${request}`)) {
+    console.log('index and more');
+    res.write(fs.readFileSync(`./public/${request}`));
+    res.end();
   } else {
+    console.log(request);
     res.write(JSON.stringify(404));
     res.end();
   }
