@@ -16,28 +16,19 @@ function resFailed(res) {
 }
 
 const server = http.createServer((req, res) => {
-  let request = req.url;
+  const request = req.url;
   try {
-    if (request === '/favicon.ico') {
-      request = '/';
-      return;
-    }
     if (
       !fs.lstatSync(`./public${request}`).isDirectory() &&
       fs.existsSync(`./public${request}`)
     ) {
       if (request === '/') {
-        resFunc(res, request);
-      } else if (fs.existsSync(`./public${request}`)) {
+        resFuncIndex(res, request);
+      } else {
         resFunc(res, request);
       }
-    } else if (
-      request.split('/').length - 1 === 1 &&
-      fs.existsSync(`./public${request}`)
-    ) {
+    } else if (fs.lstatSync(`./public${request}`).isDirectory()) {
       resFuncIndex(res, request);
-    } else if (fs.existsSync(`./public${request}`)) {
-      resFunc(res, request);
     } else {
       resFailed(res);
     }
